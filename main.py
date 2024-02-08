@@ -6,11 +6,16 @@ FONT_LANGUAGE = ("Arial", 40, "italic")
 FONT_WORD = ("Arial", 60, "bold")
 word_to_learn = {}
 
-#-------------------------------------- CHOOSE A WORD --------------------------------------#
-words_df = ps.read_csv("data/de_100.csv")
-words_dc = words_df.to_dict(orient="records")
+try:
+    words_df = ps.read_csv("data/words_to_learn.csv")
+except FileNotFoundError:
+    words_df = ps.read_csv("data/de_100.csv")
+finally:
+    words_dc = words_df.to_dict(orient="records")
 
-def select_word():
+#-------------------------------------- TO_LEARN --------------------------------------#
+
+def to_learn():
     global word_to_learn, timer
     window.after_cancel(timer)
     word_to_learn = rd.choice(words_dc)
@@ -19,9 +24,21 @@ def select_word():
     canvas.itemconfig(word_text, text=word_to_learn["German"], fill="black")
     timer = window.after(3000, flip)
 
+#-------------------------------------- CORRECT --------------------------------------#
+
+# If the word is knonw delete it from the list and create a list of still unknown words
+def correct():
+    #print(word_to_learn)
+    words_dc.remove(word_to_learn)
+    #print(words_dc)
+    words_stil_unkown_df = ps.DataFrame(words_dc)
+    words_stil_unkown_df.to_csv("data/words_to_learn.csv", index=False)
+    to_learn()
+
+
 #-------------------------------------- FLIP THE CARD --------------------------------------#
 
-# TODO Create a function witch flips the card
+# Function witch flips the card
 def flip():
         canvas.itemconfig(language_text, text="English", fill="white")
         canvas.itemconfig(word_text, text=word_to_learn["English"], fill="white")
@@ -46,14 +63,14 @@ word_text = front_canvas.create_text(400, 263, text="", font=FONT_WORD)
 
 # Buttons
 wrong_button_img = PhotoImage(file="images\wrong.png")
-wrong_bt = Button(image=wrong_button_img, bg=BACKGROUND_COLOR, highlightthickness=0, command=select_word)
+wrong_bt = Button(image=wrong_button_img, bg=BACKGROUND_COLOR, highlightthickness=0, command=to_learn)
 wrong_bt.grid(column=0, row=1)
 
 right_button_img = PhotoImage(file="images\correct.png")
-right_bt = Button(image=right_button_img, bg=BACKGROUND_COLOR, highlightthickness=0, command=select_word)
+right_bt = Button(image=right_button_img, bg=BACKGROUND_COLOR, highlightthickness=0, command=correct)
 right_bt.grid(column=1, row=1)
 
-select_word()
+to_learn()
 
 window.mainloop()
 
