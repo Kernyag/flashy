@@ -4,7 +4,6 @@ import random as rd
 BACKGROUND_COLOR = "#B1DDC6"
 FONT_LANGUAGE = ("Arial", 40, "italic")
 FONT_WORD = ("Arial", 60, "bold")
-random_word_english = ""
 word_to_learn = {}
 
 #-------------------------------------- CHOOSE A WORD --------------------------------------#
