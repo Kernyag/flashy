@@ -6,6 +6,11 @@ FONT_LANGUAGE = ("Arial", 40, "italic")
 FONT_WORD = ("Arial", 60, "bold")
 word_to_learn = {}
 
+#-------------------------------------- SAVE THE PROGRESS --------------------------------------#
+# TODO Save the already learned words
+def save_words():
+    pass
+
 #-------------------------------------- CHOOSE A WORD --------------------------------------#
 words_df = ps.read_csv("data/de_100.csv")
 words_dc = words_df.to_dict(orient="records")
@@ -21,7 +26,7 @@ def select_word():
 
 #-------------------------------------- FLIP THE CARD --------------------------------------#
 
-# TODO Create a function witch flips the card
+# Function witch flips the card
 def flip():
         canvas.itemconfig(language_text, text="English", fill="white")
         canvas.itemconfig(word_text, text=word_to_learn["English"], fill="white")
